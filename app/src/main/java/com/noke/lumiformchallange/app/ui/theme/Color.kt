@@ -1,4 +1,4 @@
-package com.noke.lumiformchallange.ui.theme
+package com.noke.lumiformchallange.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

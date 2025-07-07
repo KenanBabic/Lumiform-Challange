@@ -1,4 +1,4 @@
-package com.noke.lumiformchallange
+package com.noke.lumiformchallange.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

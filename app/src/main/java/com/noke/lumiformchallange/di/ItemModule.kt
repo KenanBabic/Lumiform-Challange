@@ -6,8 +6,8 @@ import com.noke.lumiformchallange.data.local.dao.ItemDao
 import com.noke.lumiformchallange.data.remote.ItemApiService
 import com.noke.lumiformchallange.data.remote.ItemRemoteDataSource
 import com.noke.lumiformchallange.data.remote.ItemRemoteDataSourceImpl
+import com.noke.lumiformchallange.data.remote.NetworkClient
 import com.noke.lumiformchallange.data.remote.NetworkErrorHandler
-import com.noke.lumiformchallange.data.remote.NetworkModule
 import com.noke.lumiformchallange.data.repository.ItemRepositoryImpl
 import com.noke.lumiformchallange.domain.repository.ItemRepository
 import dagger.Module
@@ -18,12 +18,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object ItemModule{
 
     @Provides
     @Singleton
-    fun providesApiService(): ItemApiService{
-        return NetworkModule.itemApiService
+    fun provideApiService(): ItemApiService {
+        return NetworkClient.itemApiService
     }
 
     @Provides
@@ -43,7 +43,6 @@ object AppModule {
         return ItemRemoteDataSourceImpl(itemApiService, networkErrorHandler)
     }
 
-
     @Provides
     @Singleton
     fun provideItemRepository(
@@ -52,11 +51,4 @@ object AppModule {
     ): ItemRepository {
         return ItemRepositoryImpl(itemRemoteDataSource, itemLocalDataSource)
     }
-
-    @Provides
-    @Singleton
-    fun provideNetworkErrorHandler(): NetworkErrorHandler {
-        return NetworkErrorHandler()
-    }
-
 }

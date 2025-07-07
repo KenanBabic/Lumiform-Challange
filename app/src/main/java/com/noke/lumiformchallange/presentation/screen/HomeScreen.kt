@@ -15,9 +15,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,9 +44,20 @@ fun HomeScreen(
     onImageClick: (String, String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(uiState.isConnected) {
+        if (!uiState.isConnected) {
+            snackbarHostState.showSnackbar(
+                message = "No internet connection.",
+                duration = SnackbarDuration.Indefinite
+            )
+        }
+    }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -134,7 +150,6 @@ private fun Error(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

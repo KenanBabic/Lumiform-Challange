@@ -1,4 +1,4 @@
-package com.noke.lumiformchallange
+package com.noke.lumiformchallange.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.noke.lumiformchallange.presentation.navigation.NavigationRoot
-import com.noke.lumiformchallange.ui.theme.LumiformChallangeTheme
+import com.noke.lumiformchallange.app.ui.theme.LumiformChallangeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
