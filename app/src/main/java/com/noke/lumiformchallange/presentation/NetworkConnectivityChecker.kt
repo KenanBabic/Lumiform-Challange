@@ -1,4 +1,4 @@
-package com.noke.lumiformchallange.data.remote
+package com.noke.lumiformchallange.presentation
 
 import android.content.Context
 import android.net.ConnectivityManager

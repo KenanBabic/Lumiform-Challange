@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.noke.lumiformchallange.data.Result.Error
 import com.noke.lumiformchallange.data.Result.Success
-import com.noke.lumiformchallange.data.remote.NetworkConnectivityChecker
+import com.noke.lumiformchallange.presentation.NetworkConnectivityChecker
 import com.noke.lumiformchallange.domain.repository.ItemRepository
 import com.noke.lumiformchallange.presentation.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

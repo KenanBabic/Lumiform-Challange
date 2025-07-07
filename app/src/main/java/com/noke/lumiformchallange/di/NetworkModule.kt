@@ -1,7 +1,7 @@
 package com.noke.lumiformchallange.di
 
 import android.content.Context
-import com.noke.lumiformchallange.data.remote.NetworkConnectivityChecker
+import com.noke.lumiformchallange.presentation.NetworkConnectivityChecker
 import com.noke.lumiformchallange.data.remote.NetworkErrorHandler
 import dagger.Module
 import dagger.Provides
