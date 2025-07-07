@@ -1,6 +1,8 @@
 package com.noke.lumiformchallange.data.remote
 
 import com.google.gson.GsonBuilder
+import com.noke.lumiformchallange.data.model.ApiModelDeserializer
+import com.noke.lumiformchallange.data.model.ItemApiModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,7 +17,9 @@ object NetworkModule {
     private const val READ_TIMEOUT = 30L
     private const val WRITE_TIMEOUT = 30L
 
-    private val gson = GsonBuilder().create()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(ItemApiModel::class.java, ApiModelDeserializer())
+        .create()
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

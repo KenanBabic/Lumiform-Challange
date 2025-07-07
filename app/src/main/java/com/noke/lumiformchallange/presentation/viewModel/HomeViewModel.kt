@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -23,32 +22,30 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<HomeUiState> = _uiState
         .onStart {
             fetchItems()
         }.stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(),
+            SharingStarted.WhileSubscribed(5000),
             HomeUiState()
         )
 
+    fun onRetryAction() {
+        fetchItems()
+    }
 
     private fun fetchItems() {
         viewModelScope.launch {
-            _uiState.update { lastState ->
-                lastState.copy(
-                    isLoading = true
+            _uiState.update { it.copy(isLoading = true) }
 
-                )
-            }
-            when (val result = itemRepository.getContent()) {
+            when (val result = itemRepository.getItems()) {
                 is Success -> {
                     _uiState.update { lastState ->
                         lastState.copy(
                             content = result.data,
                             isLoading = false,
-
-                            )
+                        )
                     }
                 }
 
@@ -57,17 +54,11 @@ class HomeViewModel @Inject constructor(
                         lastState.copy(
                             isLoading = false,
                             errorMessage = result.exception.message ?: "Failed to load content",
-                            lastException = result.exception
                         )
                     }
                 }
-
-
             }
         }
     }
 
-    fun retry() {
-        fetchItems()
-    }
 }

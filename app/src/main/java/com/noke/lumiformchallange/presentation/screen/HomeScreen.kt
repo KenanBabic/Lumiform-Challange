@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.noke.lumiformchallange.domain.model.ImageQuestion
-import com.noke.lumiformchallange.domain.model.Item
 import com.noke.lumiformchallange.domain.model.Page
 import com.noke.lumiformchallange.domain.model.Section
 import com.noke.lumiformchallange.domain.model.TextQuestion
+import com.noke.lumiformchallange.presentation.HomeUiState
 import com.noke.lumiformchallange.presentation.ItemView
 import com.noke.lumiformchallange.presentation.viewModel.HomeViewModel
 
@@ -39,32 +40,46 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold(
-    ) { paddingValues ->
-        when {
-            uiState.isLoading -> LoadingContent(paddingValues)
-            else -> LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                item {
-                    when {
-                        uiState.errorMessage != null -> Error(
-                            errorMessage = uiState.errorMessage,
-                            shouldShowRetry = uiState.shouldShowRetry,
-                            onRetry = { viewModel.retry() }
-                        )
 
-                        uiState.content != null -> SuccessContent(
-                            content = uiState.content!!,
-                            onImageClick = onImageClick
-                        )
-                    }
-                }
+    Scaffold { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            when {
+                uiState.isLoading -> LoadingContent(paddingValues)
+
+                uiState.errorMessage != null -> Error(
+                    errorMessage = uiState.errorMessage,
+                    shouldShowRetry = uiState.shouldShowRetry,
+                    onRetry = { viewModel.onRetryAction() }
+                )
+
+                else -> Content(
+                    uiState = uiState,
+                    onImageClick = onImageClick
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun Content(
+    uiState: HomeUiState,
+    onImageClick: (String, String) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(uiState.content) { item ->
+            ItemView(
+                item = item,
+                onImageClick = onImageClick
+            )
         }
     }
 }
@@ -79,18 +94,6 @@ private fun LoadingContent(paddingValues: PaddingValues) {
     ) {
         CircularProgressIndicator()
     }
-}
-
-@Composable
-private fun SuccessContent(
-    content: Item,
-    onImageClick: (String, String) -> Unit
-) {
-    ItemView (
-        item = content,
-        level = 0,
-        onImageClick = onImageClick
-    )
 }
 
 @Composable
@@ -190,12 +193,6 @@ private fun HomeScreenSuccessPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                SuccessContent(
-                    content = mockContent,
-                    onImageClick = { _, _ -> }
-                )
-            }
         }
     }
 }

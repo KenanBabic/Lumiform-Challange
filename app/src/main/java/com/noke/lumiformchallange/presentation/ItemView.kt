@@ -27,86 +27,51 @@ import com.noke.lumiformchallange.domain.model.TextQuestion
 @Composable
 fun ItemView(
     item: Item,
-    level: Int,
     onImageClick: (String, String) -> Unit
 ) {
-    val fontSize = when (level) {
-        0 -> 24.sp
-        1 -> 20.sp
-        2 -> 18.sp
-        else -> 16.sp
-    }
-
-    val fontWeight = when (level) {
-        0 -> FontWeight.Bold
-        1 -> FontWeight.SemiBold
-        else -> FontWeight.Medium
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                start = (level * 16).dp,
-                top = 8.dp,
-                end = 8.dp,
-                bottom = 8.dp
-            )
+            .padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         when (item) {
             is Page -> {
                 Text(
                     text = item.title,
-                    fontSize = fontSize,
-                    fontWeight = fontWeight,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-
-                item.items?.forEach { childItem ->
-                    ItemView(
-                        item = childItem,
-                        level = level + 1,
-                        onImageClick = onImageClick
-                    )
-                }
             }
 
             is Section -> {
                 Text(
                     text = item.title,
-                    fontSize = fontSize,
-                    fontWeight = fontWeight,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp, start = 16.dp)
                 )
-
-                item.items?.forEach { childItem ->
-                    ItemView (
-                        item = childItem,
-                        level = level + 1,
-                        onImageClick = onImageClick
-                    )
-                }
             }
 
             is TextQuestion -> {
                 Text(
                     text = item.title,
-                    fontSize = fontSize,
-                    fontWeight = fontWeight,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 4.dp, start = 32.dp)
                 )
             }
 
             is ImageQuestion -> {
                 Text(
                     text = item.title,
-                    fontSize = fontSize,
-                    fontWeight = fontWeight,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp, start = 32.dp)
                 )
 
                 AsyncImage(
@@ -114,6 +79,7 @@ fun ItemView(
                     contentDescription = item.title,
                     placeholder = painterResource(R.drawable.ic_launcher_foreground),
                     modifier = Modifier
+                        .padding(start = 32.dp)
                         .size(150.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .clickable {

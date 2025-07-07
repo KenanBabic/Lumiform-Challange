@@ -4,6 +4,6 @@ import com.noke.lumiformchallange.data.Result
 import com.noke.lumiformchallange.domain.model.Item
 
 interface ItemRepository {
-    suspend fun getContent(): Result<Item>
+    suspend fun getItems(): Result<List<Item>>
 
 }
